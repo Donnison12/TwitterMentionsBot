@@ -1,0 +1,34 @@
+## This is a program to troll your friends (or enemies) and fill their Twitter feed with song lyrics or any other text file, one mention per line.
+## Please don't over-spam. Limit calls to once every 3 seconds (hence the sleep function). 
+## I am in no way associated with Twitter.
+
+
+## Need to have tweepy and time installed.
+import tweepy
+import time
+
+## Acquire keys and tokens from dev twitter account. Can apply through https://developer.twitter.com/en/apply-for-access
+key = ""
+private_key = ""
+token = ""
+private_token = ""
+auth = tweepy.OAuthHandler(key, private_key)
+auth.set_access_token(token, private_token)
+api = tweepy.API(auth)
+
+## Used to eliminate duplicate lines as Twitter does not like that.
+i = 0
+
+## Be sure to include the @ symbol of your target.
+twitter_handle = "@examplehandle"
+
+## Filename of text file. Be sure to run the program in the same directory as the text file. If not, specify path.
+filename = ""
+
+## Where the magic happens.
+with open(filename,"r") as f:
+    for line in f:
+        post = twitter_handle + " " + line + " " + str(i)
+        api.update_status(post)
+        i += 1
+        time.sleep(3) ## Try not to lower below 1 call/second, lines can get mismatched if they are sent out too quick.
